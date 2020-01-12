@@ -13,7 +13,7 @@ namespace ChatRoomApp.Models
         [Required]
         [Column(TypeName = "varchar(MAX)")]
         public string Content { get; set; }
-        public DateTime SentDate { get; set; } = DateTime.Now;
+        public DateTime SentOn { get; set; } = DateTime.Now;
 
         public string SenderId { get; set; }
         public User Sender { get; set; }

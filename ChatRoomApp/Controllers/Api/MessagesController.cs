@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChatRoomApp.Controllers.Api
 {
-    [Route("api/[controller]")]
+    [Route("api/messages")]
     public class MessagesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -36,7 +36,7 @@ namespace ChatRoomApp.Controllers.Api
         {
             var messages = _context.Messages
                 .Where(x => x.ChatRoomId == id)
-                .OrderByDescending(x => x.SentDate)
+                .OrderByDescending(x => x.SentOn)
                 .Take(50)
                 .ToList();
 
