@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ChatRoomApp.Models
 {
-    public class Role : IdentityRole
+    public class UserRole : IdentityUserRole<string>
     {
     }
 }

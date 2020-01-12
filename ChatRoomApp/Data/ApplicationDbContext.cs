@@ -16,7 +16,5 @@ namespace ChatRoomApp.Data
 
         public DbSet<Message> Messages { get; set; }
         public DbSet<ChatRoom> ChatRooms { get; set; }
-        public new DbSet<User> Users { get; set; }
-        public new DbSet<Role> Roles { get; set; }
     }
 }
