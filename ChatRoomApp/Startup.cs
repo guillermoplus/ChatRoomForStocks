@@ -9,11 +9,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ChatRoom.Data;
+using ChatRoomApp.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace ChatRoom
+namespace ChatRoomApp
 {
     public class Startup
     {
@@ -33,6 +33,10 @@ namespace ChatRoom
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
+            //services.AddDbContext<ApplicationDbContext>(
+            //    options => options.UseMySql(Configuration.GetConnectionString("DatabaseConnection")),
+            //    ServiceLifetime.Scoped);
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

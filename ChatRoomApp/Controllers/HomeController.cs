@@ -4,9 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ChatRoom.Models;
+using ChatRoomApp.ViewModels;
 
-namespace ChatRoom.Controllers
+namespace ChatRoomApp.Controllers
 {
     public class HomeController : Controller
     {

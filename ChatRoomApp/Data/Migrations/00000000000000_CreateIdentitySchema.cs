@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ChatRoom.Data.Migrations
+namespace ChatRoomApp.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {
