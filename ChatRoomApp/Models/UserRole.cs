@@ -11,11 +11,11 @@ namespace ChatRoomApp.Models
         public int Id { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
 
         [Required]
-        public int RoleId { get; set; }
+        public string RoleId { get; set; }
         public Role Role { get; set; }
     }
 }
