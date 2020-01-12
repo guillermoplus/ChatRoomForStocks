@@ -8,6 +8,6 @@ namespace ChatRoomApp.Models
 {
     public class Role : IdentityRole
     {
-        public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public virtual ICollection<IdentityUserRole<string>> UserRoles { get; set; } = new List<IdentityUserRole<string>>();
     }
 }

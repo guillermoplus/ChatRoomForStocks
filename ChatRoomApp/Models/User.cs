@@ -13,6 +13,6 @@ namespace ChatRoomApp.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
-        public virtual ICollection<UserRole> UserRoles { get; set; } = new List<UserRole>();
+        public virtual ICollection<IdentityUserRole<string>> UserRoles { get; set; } = new List<IdentityUserRole<string>>();
     }
 }
