@@ -9,6 +9,5 @@ namespace ChatRoomApp.Models
     {
         public const string Admin = "Admin";
         public const string ChatUser = "Chat User";
-        public const string Guest = "Guest";
     }
 }
