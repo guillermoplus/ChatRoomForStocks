@@ -24,7 +24,7 @@
 @{
     if (SignInManager.IsSignedIn(User))
     {
-        <div id="frame">
+        <div id="frame" style="margin-top: 70px;">
             <div id="sidepanel">
                 <div id="profile">
                     <div class="wrap">
@@ -78,7 +78,7 @@
             <div class="content">
                 <div class="contact-profile">
                     <img src="~/images/chat-icon.png" alt="" />
-                    <p>@Model.First().Name</p>
+                    <p>@(Model.Count > 0 ? Model.First().Name : "")</p>
                     <div class="social-media">
                         <i class="fa fa-facebook" aria-hidden="true"></i>
                         <i class="fa fa-twitter" aria-hidden="true"></i>
@@ -87,16 +87,7 @@
                 </div>
                 <div class="messages">
                     <ul>
-                        @foreach (Message message in Model.First().Messages.OrderBy(x => x.SentOn))
-                        {
-                            <li class="@(message.SenderId == UserManager.GetUserId(User) ? "sent" : "replies")">
-                                <img src="@(message.SenderId == UserManager.GetUserId(User) ? "images/profile-picture.png" : "images/chat-icon.png")" alt="" />
-                                <p>
-                                    @message.Content <br />
-                                    <span class="timestamp">@message.SentOn</span>
-                                </p>
-                            </li>
-                        }
+                        
                     </ul>
                 </div>
                 <div class="message-input">
@@ -124,9 +115,8 @@
     @*<script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>*@
     <script>
 
-        $(document).data("ActiveChat", {
-            id: @if (Model.Count > 0) { @Model.First().Id } else { @("") },
-            messages: @Html.Raw(Json.Serialize(Model.Count > 0 ? Model.First().Messages.Select(x => new MessageViewModel(x, null)) : null))
+        $(document).ready(function () {
+            $('#contacts ul li.active').trigger('click');
         });
 
         $(".messages").animate({ scrollTop: $(document).height() }, "fast");
