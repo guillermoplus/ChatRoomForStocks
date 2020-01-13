@@ -14,24 +14,21 @@ using Microsoft.Extensions.Logging;
 namespace ChatRoomApp.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
-    public class RegisterModel : PageModel
+    public partial class RegisterModel : PageModel
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<User> _roleManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            RoleManager<User> roleManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _roleManager = roleManager;
             _logger = logger;
             _emailSender = emailSender;
         }
@@ -45,7 +42,6 @@ namespace ChatRoomApp.Areas.Identity.Pages.Account
         {
             [Required]
             public string FirstName { get; set; }
-
             public string LastName { get; set; }
 
             [Required]
