@@ -1,4 +1,5 @@
 ﻿@model List<ChatRoom>
+@using Newtonsoft.Json
 @inject UserManager<User> UserManager
 @inject SignInManager<User> SignInManager
 
@@ -7,9 +8,9 @@
 }
 
 @section head {
-    <script src='//production-assets.codepen.io/assets/editor/live/console_runner-079c09a0e3b9ff743e39ee2d5637b9216b3545af0de366d4b9aad9dc87e26bfd.js'></script>
-    <script src='//production-assets.codepen.io/assets/editor/live/events_runner-73716630c22bbc8cff4bd0f07b135f00a0bdc5d14629260c3ec49e5606f98fdd.js'></script>
-    <script src='//production-assets.codepen.io/assets/editor/live/css_live_reload_init-2c0dc5167d60a5af3ee189d570b1835129687ea2a61bee3513dee3a50c115a77.js'></script>
+    @*<script src='//production-assets.codepen.io/assets/editor/live/console_runner-079c09a0e3b9ff743e39ee2d5637b9216b3545af0de366d4b9aad9dc87e26bfd.js'></script>*@
+    @*<script src='//production-assets.codepen.io/assets/editor/live/events_runner-73716630c22bbc8cff4bd0f07b135f00a0bdc5d14629260c3ec49e5606f98fdd.js'></script>*@
+    @*<script src='//production-assets.codepen.io/assets/editor/live/css_live_reload_init-2c0dc5167d60a5af3ee189d570b1835129687ea2a61bee3513dee3a50c115a77.js'></script>*@
 
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700,300' rel='stylesheet' type='text/css'>
     <script src="https://use.typekit.net/hoy3lrg.js"></script>
@@ -123,17 +124,26 @@
     @*<script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>*@
     <script>
 
+        var currentChat = {
+            messages: @Html.Raw(Json.Serialize(Model.First().Messages.Select(x => new { x.ChatRoomId, x.Content, x.Id, x.SenderId, x.SentOn })))
+        };
+
         $(".messages").animate({ scrollTop: $(document).height() }, "fast");
         $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+
+        $('#contacts ul li.contact').click(function () {
+            $('#contacts ul li.contact').removeClass('active');
+            $(this).toggleClass('active');
+        });
 
         $("#profile-img").click(function () {
             $("#status-options").toggleClass("active");
         });
 
-        //$(".expand-button").click(function() {
-        //  $("#profile").toggleClass("expanded");
-        //	$("#contacts").toggleClass("expanded");
-        //});
+        $(".expand-button").click(function() {
+          $("#profile").toggleClass("expanded");
+        	$("#contacts").toggleClass("expanded");
+        });
 
         $("#status-options ul li").click(function () {
             $("#profile-img").removeClass();

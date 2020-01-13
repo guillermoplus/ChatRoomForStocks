@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChatRoomApp.Data;
 using ChatRoomApp.Models;
+using ChatRoomApp.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChatRoomApp.Controllers.Api
 {
-    [Route("api/messages")]
+    [Route("api/[controller]")]
     public class MessagesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -38,6 +39,7 @@ namespace ChatRoomApp.Controllers.Api
                 .Where(x => x.ChatRoomId == id)
                 .OrderByDescending(x => x.SentOn)
                 .Take(50)
+                .Select(x => new MessageViewModel(x))
                 .ToList();
 
             return Ok(messages);
@@ -45,23 +47,21 @@ namespace ChatRoomApp.Controllers.Api
 
         // POST api/<controller>
         [HttpPost]
-        public IActionResult Post([FromBody] Message model)
+        public IActionResult Post([FromBody] MessageViewModel model)
         {
             try
             {
                 model.SenderId = _userManager.GetUserId(User);
-
                 if (ModelState.IsValid)
                 {
-                    _context.Messages.Add(model);
-                    _context.SaveChangesAsync();
+                    _context.Messages.Add(model.GetModel());
+                    _context.SaveChangesAsync().Wait();
                 }
-
                 return Ok(model);
             }
             catch (Exception ex)
             {
-                return BadRequest("No fue posible enviar el mensaje");
+                return BadRequest(ex.Message);
             }
         }
 
