@@ -711,6 +711,13 @@
         line-height: 130%;
     }
 
+        #frame .content .messages ul li .timestamp {
+            padding: 0;
+            margin: 0;
+            font-size: x-small;
+            color: darkgray;
+        }
+
 @media screen and (min-width: 735px) {
     #frame .content .messages ul li p {
         max-width: 300px;

@@ -57,7 +57,7 @@
                     <ul>
                         @foreach (ChatRoom chat in Model)
                         {
-                            <li class="contact @(chat == Model.First() ? "active" : "")">
+                            <li class="contact @(chat == Model.First() ? "active" : "")" data-chatroomid="@chat.Id">
                                 <div class="wrap">
                                     <span class="contact-status online"></span>
                                     <img src="~/images/chat-icon.png" alt="" />
@@ -92,8 +92,8 @@
                             <li class="@(message.SenderId == UserManager.GetUserId(User) ? "sent" : "replies")">
                                 <img src="@(message.SenderId == UserManager.GetUserId(User) ? "images/profile-picture.png" : "images/chat-icon.png")" alt="" />
                                 <p>
-                                    @message.Content
-                                    <span style="padding: 0; margin: 0; font-size: x-small; color: darkgray;">@message.SentOn</span>
+                                    @message.Content <br />
+                                    <span class="timestamp">@message.SentOn</span>
                                 </p>
                             </li>
                         }
@@ -124,16 +124,44 @@
     @*<script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>*@
     <script>
 
-        var currentChat = {
-            messages: @Html.Raw(Json.Serialize(Model.First().Messages.Select(x => new { x.ChatRoomId, x.Content, x.Id, x.SenderId, x.SentOn })))
-        };
+        $(document).data("ActiveChat", {
+            id: @Model.First().Id,
+            messages: @Html.Raw(Json.Serialize(Model.First().Messages.Select(x => new MessageViewModel(x))))
+        });
 
         $(".messages").animate({ scrollTop: $(document).height() }, "fast");
         $(".messages").animate({ scrollTop: $(document).height() }, "fast");
 
+        // Al seleccionar un chat
         $('#contacts ul li.contact').click(function () {
             $('#contacts ul li.contact').removeClass('active');
             $(this).toggleClass('active');
+            $('.content .contact-profile p').text($('.contact.active .name').text());
+
+            var chatData = {
+                id: $(this).data('chatroomid'),
+                messages: null
+            }
+
+            $.ajax({
+                type: 'GET',
+                url: 'api/messages/chatroom/' + $(this).data('chatroomid'),
+                success: function (response) {
+                    chatData.messages = response;
+                    $(document).data("ActiveChat", chatData);
+
+                    $('.messages ul').html('');
+
+                    $.each(response, function (key, message) {
+                        drawMessage(message.isMyMessage ? 'sent' : 'replies', message.content, message.sentOnString);
+                    });
+
+                    console.log($(document).data("ActiveChat"));
+                },
+                error: function (ex) {
+                    console.log('Error al obtener los mensajes del chat.');
+                }
+            });
         });
 
         $("#profile-img").click(function () {
@@ -168,21 +196,22 @@
             $("#status-options").removeClass("active");
         });
 
+        function drawMessage(messageClass, message, sentOn) {
+            var imgUrl = messageClass == 'sent' ? 'images/profile-picture.png' : 'images/chat-icon.png';
+            var timestamp = '<span class="timestamp">' + sentOn + '</span>';
+            $('<li class="' + messageClass + '"><img src="' + imgUrl + '" alt="" /><p>' + message + '<br>' + timestamp + '</p></li>').appendTo($('.messages ul'));
+            $('.message-input input').val(null);
+            //$('.contact.active .preview').html('<span>You: </span>' + message);
+            $('.contact.active .preview').html(message);
+            $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+        }
+
         function newMessage() {
             message = $(".message-input input").val();
             if ($.trim(message) == '') {
                 return false;
             }
-
-            $.ajax(function () {
-
-            });
-
-            $('<li class="sent"><img src="images/profile-picture.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
-            $('.message-input input').val(null);
-            //$('.contact.active .preview').html('<span>You: </span>' + message);
-            $('.contact.active .preview').html(message);
-            $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+            drawMessage("sent", message);
         };
 
         $('.submit').click(function () {

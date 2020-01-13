@@ -25,21 +25,21 @@ namespace ChatRoomApp.Controllers.Api
         }
 
         // GET: api/<controller>
-        //[HttpGet]
-        //public IEnumerable<Message> Get()
-        //{
-
-        //}
+        [HttpGet]
+        public IEnumerable<Message> Get()
+        {
+            return new List<Message>();
+        }
 
         // GET api/<controller>/5
-        [HttpGet("{id}")]
+        [HttpGet("chatroom/{id}")]
         public IActionResult GetMessagesByChatRoom(int id)
         {
             var messages = _context.Messages
                 .Where(x => x.ChatRoomId == id)
-                .OrderByDescending(x => x.SentOn)
+                .OrderBy(x => x.SentOn)
                 .Take(50)
-                .Select(x => new MessageViewModel(x))
+                .Select(x => new MessageViewModel(x, _userManager.GetUserAsync(User).Result))
                 .ToList();
 
             return Ok(messages);
