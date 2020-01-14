@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ChatRoomApp.Models;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using ChatRoomApp.Areas.Identity.Services;
+using Microsoft.Extensions.Logging;
 
 namespace ChatRoomApp
 {
@@ -68,8 +69,10 @@ namespace ChatRoomApp
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ApplicationDbContext context,
-            UserManager<User> userManager, RoleManager<Role> roleManager)
+            UserManager<User> userManager, RoleManager<Role> roleManager, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddConsole(LogLevel.Debug);
+            loggerFactory.AddDebug(LogLevel.Debug);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
