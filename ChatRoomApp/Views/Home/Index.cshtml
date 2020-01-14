@@ -71,7 +71,7 @@
                     </ul>
                 </div>
                 <div id="bottom-bar">
-                    <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add contact</span></button>
+                    <button id="addcontact"><i class="fa fa-user-plus fa-fw" aria-hidden="true"></i> <span>Add Chat Room</span></button>
                     <button id="settings"><i class="fa fa-cog fa-fw" aria-hidden="true"></i> <span>Settings</span></button>
                 </div>
             </div>
@@ -86,9 +86,7 @@
                     </div>
                 </div>
                 <div class="messages">
-                    <ul>
-                        
-                    </ul>
+                    <ul></ul>
                 </div>
                 <div class="message-input">
                     <div class="wrap">
@@ -119,8 +117,8 @@
             $('#contacts ul li.active').trigger('click');
         });
 
-        $(".messages").animate({ scrollTop: $(document).height() }, "fast");
-        $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+        //$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+        $(".messages").animate({ scrollTop: 5000 }, "fast");
 
         // Al seleccionar un chat
         $('#contacts ul li.contact').click(function () {
@@ -143,10 +141,13 @@
                     $('.messages ul').html('');
 
                     $.each(response, function (key, message) {
-                        drawMessage(message.isMyMessage ? 'sent' : 'replies', message.content, message.sentOnString);
+                        drawMessage(
+                            message.isMyMessage ? 'sent' : 'replies',
+                            message.content,
+                            message.sentOnString,
+                            (key == response.length - 1) ? true : false
+                        );
                     });
-
-                    console.log($(document).data("ActiveChat"));
                 },
                 error: function (ex) {
                     console.log('Error al obtener los mensajes del chat.');
@@ -158,9 +159,9 @@
             $("#status-options").toggleClass("active");
         });
 
-        $(".expand-button").click(function() {
-          $("#profile").toggleClass("expanded");
-        	$("#contacts").toggleClass("expanded");
+        $(".expand-button").click(function () {
+            $("#profile").toggleClass("expanded");
+            $("#contacts").toggleClass("expanded");
         });
 
         $("#status-options ul li").click(function () {
@@ -186,22 +187,44 @@
             $("#status-options").removeClass("active");
         });
 
-        function drawMessage(messageClass, message, sentOn) {
+        function drawMessage(messageClass, message, sentOn, goDown = true) {
             var imgUrl = messageClass == 'sent' ? 'images/profile-picture.png' : 'images/chat-icon.png';
             var timestamp = '<span class="timestamp">' + sentOn + '</span>';
             $('<li class="' + messageClass + '"><img src="' + imgUrl + '" alt="" /><p>' + message + '<br>' + timestamp + '</p></li>').appendTo($('.messages ul'));
             $('.message-input input').val(null);
             //$('.contact.active .preview').html('<span>You: </span>' + message);
             $('.contact.active .preview').html(message);
-            $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+            if (goDown) {
+                $(".messages").animate({ scrollTop: 5000 }, "fast");
+            }
         }
 
         function newMessage() {
             message = $(".message-input input").val();
+            chatRoomId = $('#contacts ul li.active').data('chatroomid');
             if ($.trim(message) == '') {
                 return false;
             }
-            drawMessage("sent", message);
+
+            $.ajax({
+                type: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                dataType: 'json',
+                url: 'api/messages',
+                data: JSON.stringify({
+                    'Content': message,
+                    'ChatRoomId': chatRoomId
+                }),
+                success: function (response) {
+                    drawMessage("sent", message, response.sentOnString);
+                },
+                error: function () {
+                    console.log('No se pudo enviar el mensaje.');
+                }
+            });
+
         };
 
         $('.submit').click(function () {
@@ -214,7 +237,7 @@
                 return false;
             }
         });
-                                        //# sourceURL=pen.js
+                                            //# sourceURL=pen.js
     </script>
 
 

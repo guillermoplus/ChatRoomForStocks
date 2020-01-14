@@ -37,10 +37,12 @@ namespace ChatRoomApp.Controllers.Api
         {
             var messages = _context.Messages
                 .Where(x => x.ChatRoomId == id)
-                .OrderBy(x => x.SentOn)
+                .OrderByDescending(x => x.SentOn)
                 .Take(50)
                 .Select(x => new MessageViewModel(x, _userManager.GetUserAsync(User).Result))
                 .ToList();
+
+            messages = messages.OrderBy(x => x.SentOn).ToList();
 
             return Ok(messages);
         }
