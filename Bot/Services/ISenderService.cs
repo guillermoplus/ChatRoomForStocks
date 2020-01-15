@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Bot.Services
 {
-    interface ISenderService
+    public interface ISenderService
     {
         bool SendMessage(MessageViewModel message);
     }

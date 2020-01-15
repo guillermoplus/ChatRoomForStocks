@@ -9,12 +9,11 @@ namespace Bot
 {
     public class ObjectConverter
     {
-        public static byte[] getBytes(object obj)
+        public static byte[] getBytes<T>(T obj)
         {
             try
             {
-                if (obj == null)
-                    return null;
+                if (obj == null) return null;
                 BinaryFormatter bf = new BinaryFormatter();
                 using (MemoryStream ms = new MemoryStream())
                 {

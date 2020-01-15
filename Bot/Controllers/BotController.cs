@@ -18,7 +18,7 @@ namespace Bot.Controllers
         private readonly ISenderService _senderService;
         private readonly IReceiverService _receiverService;
 
-        public BotController(SenderService senderService, ReceiverService receiverService)
+        public BotController(ISenderService senderService, IReceiverService receiverService)
         {
             _receiverService = receiverService;
             _senderService = senderService;
@@ -41,6 +41,8 @@ namespace Bot.Controllers
             }
 
             model.Command = Utilities.getCommand(model.Content);
+
+            //model.Commands = Utilities.getCommands(model.Content);
 
             _senderService.SendMessage(model);
         }

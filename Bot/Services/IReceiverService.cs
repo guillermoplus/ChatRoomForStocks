@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Bot.Services
 {
-    interface IReceiverService
+    public interface IReceiverService
     {
         void Receive();
     }

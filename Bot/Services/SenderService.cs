@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace Bot.Services
 {
@@ -27,8 +30,12 @@ namespace Bot.Services
                             autoDelete: false,
                             arguments: null);
 
-                        //var body = Encoding.UTF8.GetBytes(message);
-                        var body = ObjectConverter.getBytes(message);
+                        var jsonMessage = JsonConvert.SerializeObject(message);
+
+                        var body = Encoding.UTF8.GetBytes(jsonMessage);
+                        //var body = ObjectConverter.getBytes<MessageViewModel>(message);
+
+                        if (body == null) throw new Exception("El objeto no pudo ser convertido a bytes");
 
                         channel.BasicPublish(
                         exchange: "",
@@ -37,13 +44,13 @@ namespace Bot.Services
                         body: body
                         );
 
-                        Console.WriteLine("Mensaje enviado: {0}", message);
+                        Debug.WriteLine("\nMensaje enviado: " + jsonMessage + "\n");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("No se pudo enviar el mensaje [{0}] debido a la siguiente excepción: {1}", [message.Content, ex.Message]);
+                Debug.WriteLine("\nNo se pudo enviar el mensaje \"" + message.Content + "\" debido a la siguiente excepción: " + ex.Message + "\n");
                 return false;
             }
 

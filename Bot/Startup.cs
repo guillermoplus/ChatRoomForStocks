@@ -33,7 +33,7 @@ namespace Bot
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IReceiverService receiverService)
         {
             if (env.IsDevelopment())
             {
@@ -43,6 +43,8 @@ namespace Bot
             {
                 app.UseHsts();
             }
+
+            //receiverService.Receive();
 
             app.UseHttpsRedirection();
             app.UseMvc();
