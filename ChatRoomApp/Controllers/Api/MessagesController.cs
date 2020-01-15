@@ -51,6 +51,8 @@ namespace ChatRoomApp.Controllers.Api
         [HttpPost]
         public IActionResult Post([FromBody] MessageViewModel model)
         {
+            
+
             try
             {
                 model.SenderId = _userManager.GetUserId(User);
