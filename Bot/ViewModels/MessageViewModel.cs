@@ -10,5 +10,6 @@ namespace Bot.ViewModels
         public string Content { get; set; }
         public int ChatRoomId { get; set; }
         public string SentOnString { get; set; } = DateTime.Now.ToString("dd/MM/yyyy h:mm:ss tt");
+        public string Command { get; set; }
     }
 }

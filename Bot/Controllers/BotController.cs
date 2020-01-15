@@ -40,6 +40,8 @@ namespace Bot.Controllers
                 throw new Exception("El mensaje no contiene ningún comando válido");
             }
 
+            model.Command = Utilities.getCommand(model.Content);
+
             _senderService.SendMessage(model);
         }
     }
